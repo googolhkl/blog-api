@@ -4,6 +4,7 @@ Django==2.0.1
 django-ckeditor==5.4.0
 django-js-asset==0.1.1
 django-storages==1.6.5
+djangorestframework==3.7.7
 docutils==0.14
 jmespath==0.9.3
 Pillow==5.0.0
