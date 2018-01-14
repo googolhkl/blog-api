@@ -13,7 +13,7 @@ class Category(models.Model):
 	class Meta:
 		ordering = ['created_date']
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
 
 
@@ -23,7 +23,7 @@ class Tag(models.Model):
 	class Meta:
 		ordering = ['name']
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
 
 	def get_absolute_url(self):
@@ -43,7 +43,7 @@ class Post(models.Model):
 		self.published_date = timezone.now()
 		self.save()
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.title
 
 	def get_absolute_url(self):
