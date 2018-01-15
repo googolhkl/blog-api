@@ -2,6 +2,7 @@ boto3==1.5.14
 botocore==1.8.28
 Django==2.0.1
 django-ckeditor==5.4.0
+django-cors-headers==2.1.0
 django-js-asset==0.1.1
 django-storages==1.6.5
 djangorestframework==3.7.7
