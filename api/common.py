@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'blog.apps.BlogConfig',
     'work.apps.WorkConfig',
+    'new_resume.apps.NewResumeConfig',
 ]
 
 MIDDLEWARE = [
