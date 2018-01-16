@@ -1,9 +1,10 @@
 from django.conf import settings
+from django.db.models import Count
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
-from blog.models import Post
+from blog.models import Post, Category, Tag
 from api.rest_framework.serializers import PostSerializer
 class PostPagination(PageNumberPagination):
     page_size = 10
@@ -53,3 +54,26 @@ class PostViewSet(viewsets.ModelViewSet):
             })
 
         return Response(post_dict, status=200)
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    def list(self, request):
+        category_list= []
+        categories = Category.objects.annotate(Count('post')).order_by("-post__count")
+
+        for category in categories[:5]:
+            category_list.append({"name": category.name})
+
+        return Response(category_list, status=200)
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    def list(self, request):
+        tags_list= []
+        tags = Tag.objects.all()
+        tags = Tag.objects.annotate(Count('post')).order_by("-post__count")
+
+        for tag in tags:
+            tags_list.append({"name": tag.name})
+
+        return Response(tags_list, status=200)
