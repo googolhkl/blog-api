@@ -4,10 +4,31 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
+from work.models import Portfolio
 from blog.models import Post, Category, Tag
 from api.rest_framework.serializers import PostSerializer
+
+
+class PortfolioViewSet(viewsets.ModelViewSet):
+    def list(self, request):
+        portfolio_list = []
+
+        portfolios = Portfolio.objects.filter(is_show=True)
+        for portfolio in portfolios:
+            portfolio_list.append({
+                "id": portfolio.pk,
+                "title": portfolio.title,
+                "description": portfolio.description,
+                "photoUrl": portfolio.image_url,
+                "link": portfolio.link
+            })
+
+        return Response(portfolio_list, status=200)
+
+
 class PostPagination(PageNumberPagination):
     page_size = 10
+
 
 class PostViewSet(viewsets.ModelViewSet):
     pagination_class = PostPagination
