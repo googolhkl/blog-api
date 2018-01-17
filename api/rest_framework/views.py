@@ -6,6 +6,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from work.models import Portfolio
 from blog.models import Post, Category, Tag
+from new_resume.models import PrivateInformation
 from api.rest_framework.serializers import PostSerializer
 
 
@@ -15,13 +16,15 @@ class PortfolioViewSet(viewsets.ModelViewSet):
 
         portfolios = Portfolio.objects.filter(is_show=True)
         for portfolio in portfolios:
-            portfolio_list.append({
-                "id": portfolio.pk,
-                "title": portfolio.title,
-                "description": portfolio.description,
-                "photoUrl": portfolio.image_url,
-                "link": portfolio.link
-            })
+            portfolio_list.append(
+                {
+                    "id": portfolio.pk,
+                    "title": portfolio.title,
+                    "description": portfolio.description,
+                    "photoUrl": portfolio.image_url,
+                    "link": portfolio.link
+                }
+            )
 
         return Response(portfolio_list, status=200)
 
@@ -98,3 +101,75 @@ class TagViewSet(viewsets.ModelViewSet):
             tags_list.append({"name": tag.name})
 
         return Response(tags_list, status=200)
+
+
+class ResumeViewSet(viewsets.ModelViewSet):
+    def list(self, request):
+        return_dict = {}
+        NAME = "KYEONGHOON LEE"
+        private_information = PrivateInformation.objects.all().order_by("-pk").first()
+
+        if private_information:
+            skills = private_information.skills.all().order_by("-proficiency")
+            educations = private_information.educations.all().order_by("-pk")
+            experiences = private_information.experiences.all().order_by("-pk")
+            self_introductions = private_information.self_introductions.all().order_by("pk")
+
+            private_information_dict = {
+                "photoUrl": private_information.photo_url,
+                "name": private_information.name,
+                "birth": private_information.birth,
+                "home": private_information.home,
+                "phone": private_information.phone,
+                "mail": private_information.email,
+                "skills": [
+                    {
+                        "name": skill.name,
+                        "proficiency": skill.proficiency,
+                        "description": skill.description
+                    } for skill in skills
+                ]
+            }
+
+            school_list = [
+                {
+                    "name": education.name,
+                    "department": education.department,
+                    "periodStart": education.period_start,
+                    "periodEnd": education.period_end,
+                    "graduation": education.graduation
+                } for education in educations
+            ]
+
+            experience_list = [
+                {
+                    "host": experience.host,
+                    "periodStart": experience.period_start,
+                    "periodEnd": experience.period_end,
+                    "projects": [
+                        {
+                            "name": project.name,
+                            "role": project.role,
+                            "description": project.description
+                        } for project in experience.projects.all().order_by("-pk")
+                    ]
+                } for experience in experiences
+            ]
+
+            self_introduction_list = [
+                {
+                    "subject": self_introduction.subject,
+                    "description": self_introduction.description
+                } for self_introduction in self_introductions
+            ]
+
+            return_dict.update({
+                "name": NAME,
+                "privateInformation": private_information_dict,
+                "education": {"schools": school_list},
+                "experiences": experience_list,
+                "selfIntroductions": self_introduction_list
+            })
+
+        return_status = 200 if return_dict else 400
+        return Response(return_dict, status=return_status)

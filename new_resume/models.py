@@ -6,6 +6,7 @@ from django.db import models
 class PrivateInformation(models.Model):
     photo = models.ImageField(upload_to='photo/', null=True, blank=True)
     name = models.CharField(max_length=30, default='') 
+    home = models.CharField(max_length=100, default='')
     birth = models.DateField(null=True, blank=True)
     phone = models.CharField(max_length=30, default='') 
     email = models.EmailField(max_length=100, default='') 
