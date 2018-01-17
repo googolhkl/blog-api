@@ -7,6 +7,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from work.models import Portfolio
 from blog.models import Post, Category, Tag
+from new_about.models import Photo
 from new_resume.models import PrivateInformation
 from api.rest_framework.serializers import PostSerializer
 
@@ -103,6 +104,15 @@ class TagViewSet(viewsets.ModelViewSet):
 
         return Response(tags_list, status=200)
 
+class AboutViewSet(viewsets.ModelViewSet):
+    def list(self, request):
+        about = Photo.objects.all().order_by("-pk").first()
+        return_dict = {
+            "photoUrl": about.image_url,
+            "likes": [like.strip().upper() for like in about.likes.split(",")]
+        }
+
+        return Response(return_dict, status=200)
 
 class ResumeViewSet(viewsets.ModelViewSet):
     def list(self, request):
