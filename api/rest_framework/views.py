@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db.models import Count
+from django.template.defaultfilters import linebreaksbr
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -135,8 +136,8 @@ class ResumeViewSet(viewsets.ModelViewSet):
                 {
                     "name": education.name,
                     "department": education.department,
-                    "periodStart": education.period_start,
-                    "periodEnd": education.period_end,
+                    "periodStart": education.period_start.strftime("%b %Y"),
+                    "periodEnd": education.period_end.strftime("%b %Y"),
                     "graduation": education.graduation
                 } for education in educations
             ]
@@ -144,8 +145,8 @@ class ResumeViewSet(viewsets.ModelViewSet):
             experience_list = [
                 {
                     "host": experience.host,
-                    "periodStart": experience.period_start,
-                    "periodEnd": experience.period_end,
+                    "periodStart": experience.period_start.strftime("%Y.%d"),
+                    "periodEnd": experience.period_end.strftime("%Y.%d"),
                     "projects": [
                         {
                             "name": project.name,
@@ -159,7 +160,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
             self_introduction_list = [
                 {
                     "subject": self_introduction.subject,
-                    "description": self_introduction.description
+                    "description": linebreaksbr(self_introduction.description)
                 } for self_introduction in self_introductions
             ]
 
