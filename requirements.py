@@ -7,6 +7,7 @@ django-js-asset==0.1.1
 django-storages==1.6.5
 djangorestframework==3.7.7
 docutils==0.14
+gunicorn==19.7.1
 jmespath==0.9.3
 Pillow==5.0.0
 psycopg2==2.7.3.2
