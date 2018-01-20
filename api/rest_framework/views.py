@@ -4,6 +4,7 @@ from django.template.defaultfilters import linebreaksbr
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+from sorl.thumbnail import get_thumbnail
 
 from work.models import Portfolio
 from blog.models import Post, Category, Tag
@@ -23,7 +24,7 @@ class PortfolioViewSet(viewsets.ModelViewSet):
                     "id": portfolio.pk,
                     "title": portfolio.title,
                     "description": portfolio.description,
-                    "photoUrl": portfolio.image_url,
+                    "photoUrl": get_thumbnail(portfolio.image_url, '802x681', crop='center', quality=99).url,
                     "link": portfolio.link
                 }
             )
@@ -108,7 +109,7 @@ class AboutViewSet(viewsets.ModelViewSet):
     def list(self, request):
         about = Photo.objects.all().order_by("-pk").first()
         return_dict = {
-            "photoUrl": about.image_url,
+            "photoUrl": get_thumbnail(about.image_url, '217x326', crop='center', quality=99).url,
             "likes": [like.strip().upper() for like in about.likes.split(",")]
         }
 
