@@ -16,3 +16,4 @@ python-dateutil==2.6.1
 pytz==2017.3
 s3transfer==0.1.12
 six==1.11.0
+sorl-thumbnail==12.4.1

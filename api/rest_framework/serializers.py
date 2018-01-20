@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from sorl.thumbnail import get_thumbnail
 from django.utils.text import Truncator
 from django.utils.html import strip_tags
 
@@ -10,7 +11,8 @@ from blog.models import Post
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     def to_representation(self, post):
         imgs = BeautifulSoup(post.content, "html.parser").find_all("img")
-        thumbnail = imgs[0].get("src") if imgs else None
+        thumbnail = get_thumbnail(imgs[0].get("src"), "100x100", crop='center', quality=99).url if imgs else None
+
         post_dict = {
             "id": post.pk,
             "title": post.title,
