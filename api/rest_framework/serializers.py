@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from django.utils.text import Truncator
 from django.utils.html import strip_tags
 
@@ -8,6 +9,8 @@ from blog.models import Post
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     def to_representation(self, post):
+        imgs = BeautifulSoup(post.content, "html.parser").find_all("img")
+        thumbnail = imgs[0].get("src") if imgs else None
         post_dict = {
             "id": post.pk,
             "title": post.title,
@@ -15,6 +18,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
             "createdAt": post.created_date.strftime("%Y.%m.%d %H:%M:%S"),
             "category": post.category.name,
             "tags": [post.name for post in post.tags.all()],
+            "thumbnail": thumbnail,
         }
         return post_dict
 

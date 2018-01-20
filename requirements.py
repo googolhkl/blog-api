@@ -1,3 +1,4 @@
+beautifulsoup4==4.6.0
 boto3==1.5.14
 botocore==1.8.28
 Django==2.0.1
