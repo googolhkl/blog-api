@@ -11,7 +11,10 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         post_dict = {
             "id": post.pk,
             "title": post.title,
-            "content": Truncator(strip_tags(post.content)).words(20)
+            "content": Truncator(strip_tags(post.content)).words(50),
+            "createdAt": post.created_date.strftime("%Y.%m.%d %H:%M:%S"),
+            "category": post.category.name,
+            "tags": [post.name for post in post.tags.all()],
         }
         return post_dict
 
