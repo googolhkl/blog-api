@@ -52,7 +52,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         try:
-            queryset = Post.objects.all()
+            queryset = Post.objects.filter(is_active=True)
 
             query_type = request.GET.get("type")
             type_name = request.GET.get("name")
@@ -73,7 +73,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None):
         post_dict = {}
-        post = Post.objects.filter(pk=pk).first()
+        post = Post.objects.filter(pk=pk, is_active=True).first()
 
         if post is not None:
             title = post.title
