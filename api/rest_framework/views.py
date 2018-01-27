@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db.models import Count
-from django.template.defaultfilters import linebreaksbr
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -182,7 +181,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
             self_introduction_list = [
                 {
                     "subject": self_introduction.subject,
-                    "description": linebreaksbr(self_introduction.description)
+                    "description": self_introduction.description
                 } for self_introduction in self_introductions
             ]
 
