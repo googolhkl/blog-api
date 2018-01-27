@@ -167,8 +167,8 @@ class ResumeViewSet(viewsets.ModelViewSet):
             experience_list = [
                 {
                     "host": experience.host,
-                    "periodStart": experience.period_start.strftime("%Y.%d"),
-                    "periodEnd": experience.period_end.strftime("%Y.%d"),
+                    "periodStart": experience.period_start.strftime("%Y.%m"),
+                    "periodEnd": experience.period_end.strftime("%Y.%m") if experience.period_end else "Current",
                     "projects": [
                         {
                             "name": project.name,

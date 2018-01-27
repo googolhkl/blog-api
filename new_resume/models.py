@@ -2,6 +2,7 @@ import os
 from django.db import models
 from django.conf import settings
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class PrivateInformation(models.Model):
     photo = models.ImageField(upload_to='photo/', null=True, blank=True)
@@ -68,7 +69,7 @@ class Project(models.Model):
             related_name="projects")
     name = models.CharField(max_length=100, default='') 
     role = models.CharField(max_length=100, default='') 
-    description = models.TextField(null=True, blank=True)
+    description = RichTextUploadingField('contents', null=True, blank=True)
 
     def __str__(self):
         return "{}[{}]".format(self.name, self.role)
@@ -80,7 +81,7 @@ class SelfIntroduction(models.Model):
             on_delete=models.CASCADE,
             related_name="self_introductions")
     subject = models.CharField(max_length=100, default='') 
-    description = models.TextField(null=True, blank=True)
+    description = RichTextUploadingField('contents', null=True, blank=True)
 
     def __str__(self):
         return self.subject
